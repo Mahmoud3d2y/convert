@@ -6,10 +6,10 @@ export type ToolId =
   | "image-to-pdf"
   | "png-to-jpg"
   | "jpg-to-png"
-  | "compress-pdf";
-
-/** Where the conversion runs: in the visitor's browser (free) or on our server. */
-export type ToolMode = "browser" | "server";
+  | "compress-pdf"
+  | "excel-to-pdf"
+  | "pdf-to-jpg"
+  | "powerpoint-to-pdf";
 
 type ToolText = {
   slug: string;
@@ -19,13 +19,16 @@ type ToolText = {
   intro: string;
 };
 
+/**
+ * A tool is a landing page for one popular conversion. It opens the same converter as the
+ * home page, with the output format chosen in advance.
+ */
 export type Tool = {
   id: ToolId;
-  mode: ToolMode;
-  /** File extensions accepted, lowercase, without the dot. */
-  accept: string[];
-  multiple: boolean;
-  outputExt: string;
+  /** Input formats this page is about (the converter still accepts any file). */
+  from: string[];
+  /** Output format picked for those inputs (see targetsFor in formats.ts). */
+  to: string;
   icon: string;
   text: Record<Locale, ToolText>;
 };
@@ -33,10 +36,8 @@ export type Tool = {
 export const tools: Tool[] = [
   {
     id: "pdf-to-word",
-    mode: "server",
-    accept: ["pdf"],
-    multiple: false,
-    outputExt: "docx",
+    from: ["pdf"],
+    to: "docx",
     icon: "📝",
     text: {
       en: {
@@ -64,10 +65,8 @@ export const tools: Tool[] = [
   },
   {
     id: "word-to-pdf",
-    mode: "server",
-    accept: ["doc", "docx", "odt", "rtf"],
-    multiple: false,
-    outputExt: "pdf",
+    from: ["doc", "docx", "odt", "rtf"],
+    to: "pdf",
     icon: "📄",
     text: {
       en: {
@@ -95,10 +94,8 @@ export const tools: Tool[] = [
   },
   {
     id: "image-to-pdf",
-    mode: "browser",
-    accept: ["jpg", "jpeg", "png", "webp"],
-    multiple: true,
-    outputExt: "pdf",
+    from: ["jpg", "png", "webp"],
+    to: "pdf",
     icon: "🖼️",
     text: {
       en: {
@@ -126,10 +123,8 @@ export const tools: Tool[] = [
   },
   {
     id: "png-to-jpg",
-    mode: "browser",
-    accept: ["png", "webp"],
-    multiple: false,
-    outputExt: "jpg",
+    from: ["png", "webp"],
+    to: "jpg",
     icon: "🎨",
     text: {
       en: {
@@ -157,10 +152,8 @@ export const tools: Tool[] = [
   },
   {
     id: "jpg-to-png",
-    mode: "browser",
-    accept: ["jpg", "jpeg", "webp"],
-    multiple: false,
-    outputExt: "png",
+    from: ["jpg", "webp"],
+    to: "png",
     icon: "🖌️",
     text: {
       en: {
@@ -188,10 +181,8 @@ export const tools: Tool[] = [
   },
   {
     id: "compress-pdf",
-    mode: "server",
-    accept: ["pdf"],
-    multiple: false,
-    outputExt: "pdf",
+    from: ["pdf"],
+    to: "compress",
     icon: "🗜️",
     text: {
       en: {
@@ -214,6 +205,93 @@ export const tools: Tool[] = [
         title: "ضغط PDF: تقليل حجم ملف PDF مجانًا",
         description: "صغّر حجم ملف PDF لإرساله بالبريد أو رفعه، مجانًا وبدون تسجيل.",
         intro: "قلّل حجم ملف PDF مع الحفاظ على وضوحه.",
+      },
+    },
+  },
+  {
+    id: "excel-to-pdf",
+    from: ["xlsx", "xls", "ods", "csv"],
+    to: "pdf",
+    icon: "📊",
+    text: {
+      en: {
+        slug: "excel-to-pdf",
+        name: "Excel to PDF",
+        title: "Excel to PDF converter, free online",
+        description: "Convert Excel spreadsheets (XLSX, XLS, CSV) to PDF for free. No sign-up, files deleted after conversion.",
+        intro: "Turn a spreadsheet into a PDF that is easy to print and share.",
+      },
+      fr: {
+        slug: "excel-en-pdf",
+        name: "Excel en PDF",
+        title: "Convertir Excel en PDF gratuitement",
+        description: "Convertissez vos tableaux Excel (XLSX, XLS, CSV) en PDF gratuitement et sans inscription.",
+        intro: "Transformez un tableur en PDF facile à imprimer et à partager.",
+      },
+      ar: {
+        slug: "excel-to-pdf",
+        name: "Excel إلى PDF",
+        title: "تحويل Excel إلى PDF مجانًا",
+        description: "حوّل جداول Excel (XLSX و XLS و CSV) إلى PDF مجانًا وبدون تسجيل.",
+        intro: "حوّل جدول البيانات إلى ملف PDF سهل الطباعة والمشاركة.",
+      },
+    },
+  },
+  {
+    id: "pdf-to-jpg",
+    from: ["pdf"],
+    to: "jpg",
+    icon: "🖼",
+    text: {
+      en: {
+        slug: "pdf-to-jpg",
+        name: "PDF to JPG",
+        title: "PDF to JPG converter, free online",
+        description: "Turn every page of a PDF into a JPG image, for free. Several pages come in one ZIP file.",
+        intro: "Get each page of your PDF as a high-quality JPG image.",
+      },
+      fr: {
+        slug: "pdf-en-jpg",
+        name: "PDF en JPG",
+        title: "Convertir PDF en JPG gratuitement",
+        description: "Transformez chaque page d'un PDF en image JPG, gratuitement. Plusieurs pages arrivent dans un fichier ZIP.",
+        intro: "Obtenez chaque page de votre PDF en image JPG de bonne qualité.",
+      },
+      ar: {
+        slug: "pdf-to-jpg",
+        name: "PDF إلى JPG",
+        title: "تحويل PDF إلى JPG مجانًا",
+        description: "حوّل كل صفحة من ملف PDF إلى صورة JPG مجانًا. تصل الصفحات المتعددة في ملف ZIP واحد.",
+        intro: "احصل على كل صفحة من ملف PDF كصورة JPG عالية الجودة.",
+      },
+    },
+  },
+  {
+    id: "powerpoint-to-pdf",
+    from: ["pptx", "ppt", "odp"],
+    to: "pdf",
+    icon: "📽",
+    text: {
+      en: {
+        slug: "powerpoint-to-pdf",
+        name: "PowerPoint to PDF",
+        title: "PowerPoint to PDF converter, free online",
+        description: "Convert PowerPoint presentations (PPTX, PPT) to PDF for free. No sign-up.",
+        intro: "Turn your slides into a PDF anyone can open.",
+      },
+      fr: {
+        slug: "powerpoint-en-pdf",
+        name: "PowerPoint en PDF",
+        title: "Convertir PowerPoint en PDF gratuitement",
+        description: "Convertissez vos présentations PowerPoint (PPTX, PPT) en PDF gratuitement et sans inscription.",
+        intro: "Transformez vos diapositives en PDF lisible par tous.",
+      },
+      ar: {
+        slug: "powerpoint-to-pdf",
+        name: "PowerPoint إلى PDF",
+        title: "تحويل PowerPoint إلى PDF مجانًا",
+        description: "حوّل عروض PowerPoint (PPTX و PPT) إلى PDF مجانًا وبدون تسجيل.",
+        intro: "حوّل شرائح العرض إلى ملف PDF يفتحه الجميع.",
       },
     },
   },

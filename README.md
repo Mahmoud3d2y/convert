@@ -2,19 +2,21 @@
 
 A free, simple file converter in **English, French and Arabic**, paid for by Google AdSense.
 
-| Tool | Where it runs |
-| --- | --- |
-| PDF → Word | Server (pdf2docx, with fixes for Arabic, powers and fonts) |
-| Word → PDF | Server (LibreOffice) |
-| Compress PDF | Server (Ghostscript) |
-| Image → PDF | Visitor's browser |
-| PNG → JPG | Visitor's browser |
-| JPG → PNG | Visitor's browser |
+The home page works like Convertio: drop one or more files, pick the output format for each
+one, click Convert, then download. Supported formats are listed in `src/lib/formats.ts`:
+
+| From | To | Where it runs |
+| --- | --- | --- |
+| PNG, JPG, WEBP, BMP, GIF, AVIF | JPG, PNG, WEBP, PDF | Visitor's browser |
+| PDF | DOCX (pdf2docx, with fixes for Arabic, powers and fonts), JPG, PNG, TXT, smaller PDF | Server |
+| DOCX, DOC, ODT, RTF, TXT, HTML | PDF, DOCX, ODT, RTF, TXT, HTML | Server (LibreOffice) |
+| XLSX, XLS, ODS, CSV | XLSX, PDF, ODS, CSV, HTML | Server (LibreOffice) |
+| PPTX, PPT, ODP | PDF, PPTX, ODP | Server (LibreOffice) |
 
 Image tools run in the browser, so they cost nothing to serve. Server tools delete every file
 right after the conversion.
 
-Every tool has its own page in each language, for example `/en/pdf-to-word`, `/fr/pdf-en-word`
+Popular conversions also have their own page in each language, for example `/en/pdf-to-word`, `/fr/pdf-en-word`
 and `/ar/pdf-to-word`, with hreflang links, a sitemap and FAQ data so Google can index them.
 Arabic pages are laid out right to left.
 
@@ -64,7 +66,9 @@ PDF → Word uses [pdf2docx](https://github.com/dothinking/pdf2docx) (GPL-3.0) a
 website, you must make the website's source code available to its users (for example by keeping
 this repository public and linking to it), or buy a commercial PyMuPDF licence from Artifex.
 
-## Add a new tool
+## Add a format or a page
 
-Add an entry in `src/lib/tools.ts` with its text in all three languages. Browser tools go in
-`src/lib/browser-convert.ts`; server tools go in `src/lib/server-convert.ts`.
+- New format or conversion: add it to `src/lib/formats.ts` (`formatCategory` and `targetsFor`).
+  Browser conversions live in `src/lib/browser-convert.ts`, server ones in `src/lib/server-convert.ts`.
+- New landing page for a popular conversion: add an entry in `src/lib/tools.ts` with its text in
+  all three languages.

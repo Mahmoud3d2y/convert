@@ -17,7 +17,7 @@ export default async function Privacy({ params }: PageProps<"/[lang]/privacy">) 
   if (!hasLocale(lang)) notFound();
   const t = dictionaries[lang];
   return (
-    <section className="content">
+    <section className="content wrap">
       <h1>{t.privacyTitle}</h1>
       {t.privacyBody.map((p) => (
         <p key={p}>{p}</p>
