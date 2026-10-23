@@ -4,7 +4,7 @@ A free, simple file converter in **English, French and Arabic**, paid for by Goo
 
 | Tool | Where it runs |
 | --- | --- |
-| PDF → Word | Server (LibreOffice) |
+| PDF → Word | Server (pdf2docx, with fixes for Arabic, powers and fonts) |
 | Word → PDF | Server (LibreOffice) |
 | Compress PDF | Server (Ghostscript) |
 | Image → PDF | Visitor's browser |
@@ -20,10 +20,11 @@ Arabic pages are laid out right to left.
 
 ## Run it locally
 
-You need Node 22, plus LibreOffice and Ghostscript for the server tools.
+You need Node 22, plus LibreOffice, Ghostscript and Python 3 for the server tools.
 
 ```bash
 npm install
+pip install -r converter/requirements.txt
 npm run dev        # http://localhost:3000
 ```
 
@@ -55,6 +56,13 @@ docker run -p 3000:3000 convert
    ids, then rebuild. `/ads.txt` is generated automatically from your publisher id.
 
 See `.env.example` for every setting.
+
+## Licences to know about
+
+PDF → Word uses [pdf2docx](https://github.com/dothinking/pdf2docx) (GPL-3.0) and
+[PyMuPDF](https://pymupdf.readthedocs.io) (AGPL-3.0). AGPL means that if you run them on a public
+website, you must make the website's source code available to its users (for example by keeping
+this repository public and linking to it), or buy a commercial PyMuPDF licence from Artifex.
 
 ## Add a new tool
 

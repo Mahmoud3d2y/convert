@@ -23,13 +23,12 @@ async function withSlot<T>(fn: () => Promise<T>): Promise<T> {
   }
 }
 
-async function libreoffice(dir: string, input: string, target: string, infilter?: string) {
+async function libreoffice(dir: string, input: string, target: string) {
   const args = [
     "--headless",
     "--norestore",
     // A private profile per job so parallel runs don't lock each other.
     `-env:UserInstallation=file://${path.join(dir, "profile")}`,
-    ...(infilter ? [`--infilter=${infilter}`] : []),
     "--convert-to",
     target,
     "--outdir",
@@ -40,6 +39,15 @@ async function libreoffice(dir: string, input: string, target: string, infilter?
   const files = await readdir(path.join(dir, "out"));
   if (!files.length) throw new Error("LibreOffice produced no output");
   return readFile(path.join(dir, "out", files[0]));
+}
+
+// PDF -> Word runs our pdf2docx-based script (see converter/pdf_to_docx.py): LibreOffice's
+// PDF import turns every line into a text box and loses Arabic text.
+async function pdfToWord(dir: string, input: string) {
+  const output = path.join(dir, "output.docx");
+  const script = path.join(process.cwd(), "converter", "pdf_to_docx.py");
+  await run(process.env.PYTHON_PATH ?? "python3", [script, input, output], { timeout: TIMEOUT_MS });
+  return readFile(output);
 }
 
 async function ghostscriptCompress(dir: string, input: string) {
@@ -77,7 +85,7 @@ export async function convertOnServer(tool: ServerToolId, data: Buffer, ext: str
         case "word-to-pdf":
           return await libreoffice(dir, input, "pdf");
         case "pdf-to-word":
-          return await libreoffice(dir, input, "docx:MS Word 2007 XML", "writer_pdf_import");
+          return await pdfToWord(dir, input);
         case "compress-pdf":
           return await ghostscriptCompress(dir, input);
       }
