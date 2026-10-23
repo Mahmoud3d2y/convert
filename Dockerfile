@@ -1,4 +1,4 @@
-# Free file converter: Next.js + LibreOffice (Word -> PDF) + pdf2docx (PDF -> Word)
+# Free file converter: Next.js + LibreOffice (Office formats) + pdf2docx (PDF -> Word)
 # + Ghostscript (PDF compress)
 FROM node:22-bookworm-slim AS build
 WORKDIR /app
@@ -15,7 +15,8 @@ RUN npm run build
 FROM node:22-bookworm-slim
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-      libreoffice-writer-nogui ghostscript python3 python3-venv \
+      libreoffice-writer-nogui libreoffice-calc-nogui libreoffice-impress-nogui \
+      ghostscript python3 python3-venv \
       fonts-liberation fonts-crosextra-carlito fonts-crosextra-caladea \
       fonts-dejavu-core fonts-noto-core \
  && rm -rf /var/lib/apt/lists/*

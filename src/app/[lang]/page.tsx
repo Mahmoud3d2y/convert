@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import AdSlot from "@/components/AdSlot";
+import Features from "@/components/Features";
+import Hero from "@/components/Hero";
 import ToolGrid from "@/components/ToolGrid";
 import { dictionaries, hasLocale } from "@/lib/i18n";
 import { adSlots, alternates, homePath } from "@/lib/site";
@@ -24,14 +26,14 @@ export default async function Home({ params }: PageProps<"/[lang]">) {
 
   return (
     <>
-      <section className="hero">
-        <h1>{t.tagline}</h1>
-        <p className="muted">{t.homeDescription}</p>
-      </section>
-      <AdSlot slot={adSlots.top} label={t.advertisement} />
-      <h2 className="section-title">{t.allTools}</h2>
-      <ToolGrid lang={lang} />
-      <AdSlot slot={adSlots.bottom} label={t.advertisement} />
+      <Hero title={t.heroTitle} subtitle={t.heroSubtitle} t={t} />
+      <div className="wrap">
+        <AdSlot slot={adSlots.top} label={t.advertisement} />
+        <Features t={t} />
+        <h2 className="section-title">{t.popular}</h2>
+        <ToolGrid lang={lang} />
+        <AdSlot slot={adSlots.bottom} label={t.advertisement} />
+      </div>
     </>
   );
 }

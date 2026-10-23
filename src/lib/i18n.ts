@@ -19,13 +19,7 @@ export type Dictionary = {
   homeTitle: string;
   homeDescription: string;
   allTools: string;
-  dropHere: string;
-  orClick: string;
-  maxSize: string;
-  convert: string;
-  converting: string;
   download: string;
-  again: string;
   errorGeneric: string;
   errorTooBig: string;
   errorType: string;
@@ -39,35 +33,45 @@ export type Dictionary = {
   privacyBody: string[];
   footer: string;
   advertisement: string;
-  filesSelected: string;
-  inBrowser: string;
-  onServer: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  chooseFiles: string;
+  dropAnywhere: string;
+  to: string;
+  chooseFormat: string;
+  searchFormat: string;
+  addMore: string;
+  convertAll: string;
+  remove: string;
+  statusReady: string;
+  statusWaiting: string;
+  statusConverting: string;
+  statusDone: string;
+  noTargets: string;
+  categoryNames: Record<"image" | "document" | "spreadsheet" | "presentation", string>;
+  compressLabel: string;
+  popular: string;
+  features: { icon: string; title: string; text: string }[];
 };
 
 export const dictionaries: Record<Locale, Dictionary> = {
   en: {
     siteName: "Convert",
     tagline: "Free online file converter",
-    homeTitle: "Free online file converter: PDF, Word, images",
+    homeTitle: "Free online file converter: PDF, Word, Excel, images",
     homeDescription:
-      "Convert PDF to Word, Word to PDF, images to PDF, PNG to JPG and compress PDF files. Free, fast, no sign-up.",
+      "Convert PDF, Word, Excel, PowerPoint and image files to any format. Free, fast, no sign-up.",
     allTools: "All tools",
-    dropHere: "Drop your file here",
-    orClick: "or click to choose",
-    maxSize: "Max 25 MB",
-    convert: "Convert",
-    converting: "Converting…",
     download: "Download",
-    again: "Convert another file",
     errorGeneric: "Something went wrong. Please try again.",
     errorTooBig: "This file is too big (max 25 MB).",
     errorType: "This file type is not supported for this tool.",
     errorRateLimit: "Too many conversions. Please wait a few minutes.",
     howItWorks: "How it works",
     steps: [
-      "Choose or drop your file.",
-      "Click Convert and wait a few seconds.",
-      "Download your converted file.",
+      "Choose or drop your files.",
+      "Pick the format you want, then click Convert.",
+      "Download your converted files.",
     ],
     faq: "Questions",
     faqs: [
@@ -88,33 +92,48 @@ export const dictionaries: Record<Locale, Dictionary> = {
     ],
     footer: "Free file converter. Files are deleted after conversion.",
     advertisement: "Advertisement",
-    filesSelected: "files selected",
-    inBrowser: "Runs in your browser, your file stays on your device",
-    onServer: "Your file is deleted right after conversion",
+    heroTitle: "File converter",
+    heroSubtitle: "Convert your files to any format: PDF, Word, Excel, PowerPoint, images. Free, no sign-up.",
+    chooseFiles: "Choose files",
+    dropAnywhere: "or drop files here · 25 MB max per file",
+    to: "to",
+    chooseFormat: "Choose…",
+    searchFormat: "Search a format",
+    addMore: "Add more files",
+    convertAll: "Convert",
+    remove: "Remove",
+    statusReady: "Ready",
+    statusWaiting: "Waiting…",
+    statusConverting: "Converting…",
+    statusDone: "Done",
+    noTargets: "This format is not supported yet",
+    categoryNames: { document: "Document", image: "Image", spreadsheet: "Spreadsheet", presentation: "Presentation" },
+    compressLabel: "PDF (smaller)",
+    popular: "Popular conversions",
+    features: [
+      { icon: "🗂", title: "20+ formats", text: "Documents, spreadsheets, presentations and images, in one place." },
+      { icon: "⚡", title: "Fast and simple", text: "Drop your files, pick a format, click Convert. That's it." },
+      { icon: "🔒", title: "Private", text: "Image conversions stay in your browser. Other files are deleted right after conversion." },
+      { icon: "📱", title: "Works everywhere", text: "Phone, tablet or computer: nothing to install." },
+    ],
   },
   fr: {
     siteName: "Convert",
     tagline: "Convertisseur de fichiers gratuit en ligne",
-    homeTitle: "Convertisseur de fichiers gratuit : PDF, Word, images",
+    homeTitle: "Convertisseur de fichiers gratuit : PDF, Word, Excel, images",
     homeDescription:
-      "Convertissez PDF en Word, Word en PDF, images en PDF, PNG en JPG et compressez vos PDF. Gratuit, rapide, sans inscription.",
+      "Convertissez vos fichiers PDF, Word, Excel, PowerPoint et images dans n'importe quel format. Gratuit, rapide, sans inscription.",
     allTools: "Tous les outils",
-    dropHere: "Déposez votre fichier ici",
-    orClick: "ou cliquez pour choisir",
-    maxSize: "25 Mo maximum",
-    convert: "Convertir",
-    converting: "Conversion…",
     download: "Télécharger",
-    again: "Convertir un autre fichier",
     errorGeneric: "Une erreur est survenue. Veuillez réessayer.",
     errorTooBig: "Ce fichier est trop lourd (25 Mo maximum).",
     errorType: "Ce type de fichier n'est pas pris en charge par cet outil.",
     errorRateLimit: "Trop de conversions. Patientez quelques minutes.",
     howItWorks: "Comment ça marche",
     steps: [
-      "Choisissez ou déposez votre fichier.",
-      "Cliquez sur Convertir et patientez quelques secondes.",
-      "Téléchargez votre fichier converti.",
+      "Choisissez ou déposez vos fichiers.",
+      "Choisissez le format voulu, puis cliquez sur Convertir.",
+      "Téléchargez vos fichiers convertis.",
     ],
     faq: "Questions",
     faqs: [
@@ -135,33 +154,48 @@ export const dictionaries: Record<Locale, Dictionary> = {
     ],
     footer: "Convertisseur de fichiers gratuit. Les fichiers sont supprimés après conversion.",
     advertisement: "Publicité",
-    filesSelected: "fichiers sélectionnés",
-    inBrowser: "Fonctionne dans votre navigateur, votre fichier reste sur votre appareil",
-    onServer: "Votre fichier est supprimé juste après la conversion",
+    heroTitle: "Convertisseur de fichiers",
+    heroSubtitle: "Convertissez vos fichiers dans n'importe quel format : PDF, Word, Excel, PowerPoint, images. Gratuit, sans inscription.",
+    chooseFiles: "Choisir les fichiers",
+    dropAnywhere: "ou déposez vos fichiers ici · 25 Mo max par fichier",
+    to: "en",
+    chooseFormat: "Choisir…",
+    searchFormat: "Rechercher un format",
+    addMore: "Ajouter des fichiers",
+    convertAll: "Convertir",
+    remove: "Retirer",
+    statusReady: "Prêt",
+    statusWaiting: "En attente…",
+    statusConverting: "Conversion…",
+    statusDone: "Terminé",
+    noTargets: "Ce format n'est pas encore pris en charge",
+    categoryNames: { document: "Document", image: "Image", spreadsheet: "Tableur", presentation: "Présentation" },
+    compressLabel: "PDF (plus léger)",
+    popular: "Conversions populaires",
+    features: [
+      { icon: "🗂", title: "Plus de 20 formats", text: "Documents, tableurs, présentations et images, au même endroit." },
+      { icon: "⚡", title: "Rapide et simple", text: "Déposez vos fichiers, choisissez un format, cliquez sur Convertir. C'est tout." },
+      { icon: "🔒", title: "Confidentiel", text: "Les images sont converties dans votre navigateur. Les autres fichiers sont supprimés juste après." },
+      { icon: "📱", title: "Partout", text: "Téléphone, tablette ou ordinateur : rien à installer." },
+    ],
   },
   ar: {
     siteName: "Convert",
     tagline: "محوّل ملفات مجاني على الإنترنت",
-    homeTitle: "محوّل ملفات مجاني: PDF و Word والصور",
+    homeTitle: "محوّل ملفات مجاني: PDF و Word و Excel والصور",
     homeDescription:
-      "حوّل PDF إلى Word و Word إلى PDF والصور إلى PDF و PNG إلى JPG واضغط ملفات PDF. مجاني وسريع وبدون تسجيل.",
+      "حوّل ملفات PDF و Word و Excel و PowerPoint والصور إلى أي صيغة. مجاني وسريع وبدون تسجيل.",
     allTools: "كل الأدوات",
-    dropHere: "اسحب ملفك وأفلته هنا",
-    orClick: "أو انقر للاختيار",
-    maxSize: "الحد الأقصى 25 ميغابايت",
-    convert: "تحويل",
-    converting: "جارٍ التحويل…",
     download: "تنزيل",
-    again: "تحويل ملف آخر",
     errorGeneric: "حدث خطأ. يرجى المحاولة مرة أخرى.",
     errorTooBig: "هذا الملف كبير جدًا (الحد الأقصى 25 ميغابايت).",
     errorType: "نوع الملف هذا غير مدعوم في هذه الأداة.",
     errorRateLimit: "عدد كبير من التحويلات. يرجى الانتظار بضع دقائق.",
     howItWorks: "كيف يعمل",
     steps: [
-      "اختر ملفك أو اسحبه وأفلته.",
-      "انقر على تحويل وانتظر بضع ثوانٍ.",
-      "نزّل الملف المحوَّل.",
+      "اختر ملفاتك أو اسحبها وأفلتها.",
+      "اختر الصيغة المطلوبة، ثم انقر على تحويل.",
+      "نزّل ملفاتك المحوَّلة.",
     ],
     faq: "أسئلة",
     faqs: [
@@ -182,8 +216,29 @@ export const dictionaries: Record<Locale, Dictionary> = {
     ],
     footer: "محوّل ملفات مجاني. تُحذف الملفات بعد التحويل.",
     advertisement: "إعلان",
-    filesSelected: "ملفات محددة",
-    inBrowser: "يعمل داخل متصفحك، ويبقى ملفك على جهازك",
-    onServer: "يُحذف ملفك فور انتهاء التحويل",
+    heroTitle: "محوّل الملفات",
+    heroSubtitle: "حوّل ملفاتك إلى أي صيغة: PDF و Word و Excel و PowerPoint والصور. مجاني وبدون تسجيل.",
+    chooseFiles: "اختر الملفات",
+    dropAnywhere: "أو أفلت الملفات هنا · 25 ميغابايت كحد أقصى لكل ملف",
+    to: "إلى",
+    chooseFormat: "اختر…",
+    searchFormat: "ابحث عن صيغة",
+    addMore: "أضف ملفات أخرى",
+    convertAll: "تحويل",
+    remove: "إزالة",
+    statusReady: "جاهز",
+    statusWaiting: "في الانتظار…",
+    statusConverting: "جارٍ التحويل…",
+    statusDone: "تم",
+    noTargets: "هذه الصيغة غير مدعومة بعد",
+    categoryNames: { document: "مستند", image: "صورة", spreadsheet: "جدول بيانات", presentation: "عرض تقديمي" },
+    compressLabel: "PDF (أخف)",
+    popular: "تحويلات شائعة",
+    features: [
+      { icon: "🗂", title: "أكثر من 20 صيغة", text: "مستندات وجداول بيانات وعروض تقديمية وصور في مكان واحد." },
+      { icon: "⚡", title: "سريع وبسيط", text: "أفلت ملفاتك، اختر الصيغة، ثم انقر على تحويل. هذا كل شيء." },
+      { icon: "🔒", title: "خصوصية", text: "تُحوَّل الصور داخل متصفحك. وتُحذف الملفات الأخرى فور انتهاء التحويل." },
+      { icon: "📱", title: "يعمل في كل مكان", text: "على الهاتف أو اللوحي أو الحاسوب: لا شيء لتثبيته." },
+    ],
   },
 };

@@ -4,7 +4,8 @@ import Script from "next/script";
 import { notFound } from "next/navigation";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { dictionaries, dir, hasLocale, locales } from "@/lib/i18n";
-import { siteUrl } from "@/lib/site";
+import { siteUrl, toolPath } from "@/lib/site";
+import { tools } from "@/lib/tools";
 import "../globals.css";
 
 export const dynamicParams = false;
@@ -46,10 +47,24 @@ export default async function LangLayout({ children, params }: LayoutProps<"/[la
             <Link href={`/${lang}`} className="logo">
               <span aria-hidden="true">⇄</span> {t.siteName}
             </Link>
-            <LanguageSwitcher current={lang} />
+            <nav className="main-nav">
+              <details className="tools-menu">
+                <summary>{t.allTools}</summary>
+                <ul>
+                  {tools.map((tool) => (
+                    <li key={tool.id}>
+                      <Link href={toolPath(lang, tool)}>
+                        <span aria-hidden="true">{tool.icon}</span> {tool.text[lang].name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+              <LanguageSwitcher current={lang} />
+            </nav>
           </div>
         </header>
-        <main className="wrap">{children}</main>
+        <main>{children}</main>
         <footer className="site-footer">
           <div className="wrap footer-row">
             <span>{t.footer}</span>

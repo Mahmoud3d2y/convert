@@ -3,6 +3,7 @@ import { mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
+import type { Engine } from "./formats";
 
 const run = promisify(execFile);
 const TIMEOUT_MS = 90_000;
@@ -73,21 +74,42 @@ async function ghostscriptCompress(dir: string, input: string) {
   return compressed.length < original.length ? compressed : original;
 }
 
-export type ServerToolId = "pdf-to-word" | "word-to-pdf" | "compress-pdf";
+// PDF pages -> JPG/PNG (zipped when there are several pages) or plain text.
+async function pdfRender(dir: string, input: string, to: string) {
+  const script = path.join(process.cwd(), "converter", "pdf_render.py");
+  const output = path.join(dir, "output");
+  const { stdout } = await run(process.env.PYTHON_PATH ?? "python3", [script, input, to, output], {
+    timeout: TIMEOUT_MS,
+  });
+  const file = stdout.trim();
+  return { data: await readFile(file), zipped: file.endsWith(".zip") };
+}
 
-export async function convertOnServer(tool: ServerToolId, data: Buffer, ext: string) {
+// LibreOffice output filters for targets whose plain extension isn't enough.
+const OFFICE_FILTER: Record<string, string> = {
+  txt: "txt:Text (encoded):UTF8",
+  csv: "csv:Text - txt - csv (StarCalc):44,34,76",
+};
+
+export type ServerResult = { data: Buffer; zipped: boolean };
+
+export async function convertOnServer(engine: Engine, data: Buffer, from: string, to: string): Promise<ServerResult> {
   return withSlot(async () => {
     const dir = await mkdtemp(path.join(tmpdir(), "convert-"));
     try {
-      const input = path.join(dir, `input.${ext}`);
+      const input = path.join(dir, `input.${from}`);
       await writeFile(input, data);
-      switch (tool) {
-        case "word-to-pdf":
-          return await libreoffice(dir, input, "pdf");
+      switch (engine) {
+        case "office":
+          return { data: await libreoffice(dir, input, OFFICE_FILTER[to] ?? to), zipped: false };
         case "pdf-to-word":
-          return await pdfToWord(dir, input);
-        case "compress-pdf":
-          return await ghostscriptCompress(dir, input);
+          return { data: await pdfToWord(dir, input), zipped: false };
+        case "pdf-compress":
+          return { data: await ghostscriptCompress(dir, input), zipped: false };
+        case "pdf-render":
+          return await pdfRender(dir, input, to);
+        default:
+          throw new Error(`Engine ${engine} does not run on the server`);
       }
     } finally {
       // Files are never kept after the conversion.
@@ -96,12 +118,34 @@ export async function convertOnServer(tool: ServerToolId, data: Buffer, ext: str
   });
 }
 
+const isZip = (h: Buffer) => h[0] === 0x50 && h[1] === 0x4b;
+const isOle = (h: Buffer) => h.length >= 4 && h.readUInt32BE(0) === 0xd0cf11e0;
+const isText = (data: Buffer) => !data.subarray(0, 4096).includes(0);
+
 /** Quick content check so we don't feed random files to LibreOffice. */
 export function looksLike(ext: string, data: Buffer) {
   const head = data.subarray(0, 8);
-  if (ext === "pdf") return head.subarray(0, 5).toString("latin1") === "%PDF-";
-  if (ext === "docx" || ext === "odt") return head[0] === 0x50 && head[1] === 0x4b; // zip
-  if (ext === "doc") return head.readUInt32BE(0) === 0xd0cf11e0; // OLE
-  if (ext === "rtf") return head.subarray(0, 5).toString("latin1") === "{\\rtf";
-  return false;
+  switch (ext) {
+    case "pdf":
+      return head.subarray(0, 5).toString("latin1") === "%PDF-";
+    case "docx":
+    case "odt":
+    case "xlsx":
+    case "ods":
+    case "pptx":
+    case "odp":
+      return isZip(head);
+    case "doc":
+    case "xls":
+    case "ppt":
+      return isOle(head);
+    case "rtf":
+      return head.subarray(0, 5).toString("latin1") === "{\\rtf";
+    case "txt":
+    case "csv":
+    case "html":
+      return isText(data);
+    default:
+      return false;
+  }
 }

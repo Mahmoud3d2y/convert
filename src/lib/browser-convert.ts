@@ -22,14 +22,14 @@ function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality?: number)
   );
 }
 
-export async function convertImage(file: File, to: "jpg" | "png") {
+export async function convertImage(file: File, to: "jpg" | "png" | "webp") {
   if (to === "jpg") {
     // JPG has no transparency, so paint a white background first.
     const canvas = await loadToCanvas(file, "#ffffff");
     return canvasToBlob(canvas, "image/jpeg", 0.92);
   }
   const canvas = await loadToCanvas(file);
-  return canvasToBlob(canvas, "image/png");
+  return to === "webp" ? canvasToBlob(canvas, "image/webp", 0.9) : canvasToBlob(canvas, "image/png");
 }
 
 // A4 in PDF points.

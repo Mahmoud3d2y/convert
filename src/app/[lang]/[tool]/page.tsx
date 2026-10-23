@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import AdSlot from "@/components/AdSlot";
-import Converter from "@/components/Converter";
+import Hero from "@/components/Hero";
 import ToolGrid from "@/components/ToolGrid";
 import { dictionaries, hasLocale, locales } from "@/lib/i18n";
 import { adSlots, alternates, toolPath } from "@/lib/site";
@@ -46,44 +46,33 @@ export default async function ToolPage({ params }: PageProps<"/[lang]/[tool]">) 
 
   return (
     <>
-      <section className="hero">
-        <h1>{text.title}</h1>
-        <p className="muted">{text.intro}</p>
-      </section>
+      <Hero title={text.title} subtitle={text.intro} t={t} presetTo={tool.to} />
+      <div className="wrap">
+        <AdSlot slot={adSlots.top} label={t.advertisement} />
 
-      <Converter
-        toolId={tool.id}
-        mode={tool.mode}
-        accept={tool.accept}
-        multiple={tool.multiple}
-        outputExt={tool.outputExt}
-        t={t}
-      />
+        <section className="content">
+          <h2>{t.howItWorks}</h2>
+          <ol>
+            {t.steps.map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ol>
+          <h2>{t.faq}</h2>
+          <dl>
+            {t.faqs.map((f) => (
+              <div key={f.q}>
+                <dt>{f.q}</dt>
+                <dd>{f.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
 
-      <AdSlot slot={adSlots.top} label={t.advertisement} />
+        <AdSlot slot={adSlots.bottom} label={t.advertisement} />
 
-      <section className="content">
-        <h2>{t.howItWorks}</h2>
-        <ol>
-          {t.steps.map((s) => (
-            <li key={s}>{s}</li>
-          ))}
-        </ol>
-        <h2>{t.faq}</h2>
-        <dl>
-          {t.faqs.map((f) => (
-            <div key={f.q}>
-              <dt>{f.q}</dt>
-              <dd>{f.a}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-
-      <AdSlot slot={adSlots.bottom} label={t.advertisement} />
-
-      <h2 className="section-title">{t.allTools}</h2>
-      <ToolGrid lang={lang} exclude={tool.id} />
+        <h2 className="section-title">{t.allTools}</h2>
+        <ToolGrid lang={lang} exclude={tool.id} />
+      </div>
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
     </>
