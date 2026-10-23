@@ -1,0 +1,33 @@
+{
+  "name": "convert",
+  "version": "1.0.0",
+  "description": "Free online file converter (PDF, Word, images) in English, French and Arabic",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mahmoud3d2y/convert.git"
+  },
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Mahmoud3d2y/convert/issues"
+  },
+  "homepage": "https://github.com/Mahmoud3d2y/convert#readme",
+  "dependencies": {
+    "next": "^16.4.2",
+    "pdf-lib": "^1.17.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.1",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "typescript": "^5.9.3"
+  },
+  "private": true
+}
